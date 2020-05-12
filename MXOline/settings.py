@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'apps.organization.apps.OrganizationConfig',
     'pure_pagination',
 
+
 ]
 
 MIDDLEWARE = [
