@@ -15,6 +15,7 @@ class OrgView(View):
         all_orgs = CourseOrg.objects.all()
         #org_nums = CourseOrg.objects.all().count()
         all_citys = City.objects.all()
+        hot_orgs = all_orgs.order_by("-click_nums")[:3]
         #获取点击的类目
         category = request.GET.get("ct","")
         if category:
@@ -52,4 +53,5 @@ class OrgView(View):
                        'all_citys':all_citys,
                        'category':category,
                        'sort': sort,
+                       'hot_orgs':hot_orgs,
                        })
