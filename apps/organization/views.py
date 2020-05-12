@@ -1,7 +1,9 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import View
 from apps.organization.models import CourseOrg, City, Teacher
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from apps.organization.forms import AddAskForm
 # Create your views here.
 class OrgView(View):
     def get(self, request, *args, **kwargs):
@@ -59,4 +61,15 @@ class OrgView(View):
 class AddAsk(View):
     """处理用户咨询模块"""
     def post(self, request, *args, **kwargs):
-        pass
+        userask_form = AddAskForm(request.POST)
+        if userask_form.is_valid():
+            userask_form.save(commit=True)
+            return JsonResponse({
+                "status":"success",
+                "msg":"提交成功"
+            })
+        else:
+            return JsonResponse({
+                "status": "fail",
+                "msg": "添加出错"
+            })
