@@ -7,7 +7,8 @@ class CourseListView(View):
     def get(self, request, *args, **kwargs):
         """获取课程列表信息"""
         all_courses = Course.objects.order_by("-add_time")
-
+        ## 获取热门课程 前3个
+        hot_courses = Course.objects.order_by("-click_nums")[:3]
 
         #课程排序
         sort = request.GET.get('sort', "")
@@ -31,4 +32,5 @@ class CourseListView(View):
         return render(request, 'course-list.html',
                       {"all_courses":courses,
                        "sort":sort,
+                       "hot_courses":hot_courses,
                        })
