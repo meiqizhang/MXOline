@@ -87,10 +87,10 @@ WSGI_APPLICATION = 'MXOline.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mxonline', # 数据库名字
+        'NAME': 'mxonline1', # 数据库名字
         'USER':'root',
         'PASSWORD':'root',
-        'HOST':'localhost',
+        'HOST':'123.56.16.16',
         'PORT':3306,
     }
 }

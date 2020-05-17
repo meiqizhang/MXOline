@@ -1,7 +1,7 @@
 from django.db import models
-from apps.users.models import UserProfile
-from apps.users.models import BaseModel
 
+from apps.users.models import BaseModel
+from apps.users.models import UserProfile
 
 class City(BaseModel):
     name = models.CharField(max_length=20, verbose_name=u"城市名")
@@ -48,7 +48,7 @@ class CourseOrg(BaseModel):
 class Teacher(BaseModel):
     user = models.OneToOneField(UserProfile, on_delete=models.SET_NULL, null=True, blank=True,verbose_name="用户")
     org = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name="所属机构")
-    name = models.CharField(max_length=50, verbose_name=u"教师名")
+    name = models.CharField(max_length=50, verbose_name="教师名")
     work_years = models.IntegerField(default=0, verbose_name="工作年限")
     work_company = models.CharField(max_length=50, verbose_name="就职公司")
     work_position = models.CharField(max_length=50, verbose_name="公司职位")
