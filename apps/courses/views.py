@@ -3,6 +3,9 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from apps.courses.models import Course
 from apps.operations.models import UserFavorite
+from apps.courses.models import Video, CourseResource
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 class CourseListView(View):
     def get(self, request, *args, **kwargs):
@@ -11,7 +14,6 @@ class CourseListView(View):
         ## 获取热门课程 前3个
         hot_courses = Course.objects.order_by("-click_nums")[:3]
 
-        #课程排序
         sort = request.GET.get('sort', "")
         if sort == 'students':
             # 根据参与人数排序  减号代表倒序排序的意思
@@ -37,8 +39,15 @@ class CourseListView(View):
                        })
 
 class CourseDetailView(View):
-    def get(self, request,course_id, *args, **kwargs):
-        """获取课程详情页"""
+
+    def get(self, request, course_id, *args, **kwargs):
+        """
+        获取课程详情页
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         # 根据id查询课程
         course = Course.objects.get(id=int(course_id))
         # 点击到课程 的详情就记录一次点击数
@@ -56,6 +65,6 @@ class CourseDetailView(View):
 
         return render(request, 'course-detail.html',
                       {"course":course,
-                       "has_fav_course": has_fav_course,
-                       "has_fav_org": has_fav_org,
-                       })
+                       "has_fav_course":has_fav_course,
+                       "has_fav_org":has_fav_org
+                    })
