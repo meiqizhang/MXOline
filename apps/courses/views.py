@@ -1,11 +1,10 @@
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.views.generic.base import View
-from apps.courses.models import Course
-from apps.operations.models import UserFavorite,UserCourse
-from apps.courses.models import CourseResource
+from apps.courses.models import Course, CourseTag
+from apps.operations.models import UserFavorite, UserCourse
+from apps.courses.models import Video, CourseResource
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 
 # Create your views here.
 class CourseListView(View):
@@ -64,10 +63,31 @@ class CourseDetailView(View):
             if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=2):
                 has_fav_org = True
 
+        #课程推荐
+        #通过课程的单标签进行课程推荐
+
+        # tag = course.tag
+        # related_courses = []
+        # if tag:
+        #     related_courses = Course.objects.filter(tag=tag).exclude(id__in=[course.id])[:3]
+        #     print(related_courses)
+
+        # 通过 CourseTag类进行课程推荐
+        tags = course.coursetag_set.all()
+        # 遍历
+        tag_list = [tag.tag for tag in tags]
+        course_tags = CourseTag.objects.filter(tag__in=tag_list).exclude(course__id=course.id)
+        related_courses = set()
+        for course_tag in course_tags:
+            related_courses.add(course_tag.course)
+            print(related_courses)
+
+
         return render(request, 'course-detail.html',
                       {"course":course,
                        "has_fav_course":has_fav_course,
-                       "has_fav_org":has_fav_org
+                       "has_fav_org":has_fav_org,
+                       "related_courses":related_courses
                     })
 
 class CourseLessonView(LoginRequiredMixin,View):
@@ -88,16 +108,16 @@ class CourseLessonView(LoginRequiredMixin,View):
         print(user_ids)
         # 查询这个用户关联的所有课程
         all_courses = UserCourse.objects.filter(user_id__in=user_ids).order_by("-course__click_nums")[:5]
-        # # 过滤掉当前课程
-        # related_courses = []
-        # for item in all_courses:
-        #     if item.course.id != course.id:
-        #         related_courses.append(item.course)
-        #
+        # 过滤掉当前课程
+        related_courses = []
+        for item in all_courses:
+            if item.course.id != course.id:
+                related_courses.append(item.course)
+
         # 查询资料信息
         course_resource = CourseResource.objects.filter(course=course)
         return render(request, 'course-video.html',
                       {"course": course,
                        "course_resource":course_resource,
-                       # "related_courses":related_courses,
+                       "related_courses":related_courses,
                        })
