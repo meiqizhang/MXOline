@@ -21,7 +21,7 @@ import xadmin
 from django.views.generic import TemplateView
 
 from apps.organization.views import OrgView
-from apps.users.views import LoginView
+from apps.users.views import LoginView,LogoutView
 from django.conf.urls import url,include
 from django.views.static import serve
 from MXOline.settings import MEDIA_ROOT
@@ -32,6 +32,7 @@ urlpatterns = [
     path('',TemplateView.as_view(template_name='index.html'),name = 'index'),
     path('courselist/',TemplateView.as_view(template_name='course-list.html'),name = 'course-list'),
     path('login/',LoginView.as_view(), name ='login'),
+    path('logout/',LogoutView.as_view(), name ='logout'),
     #配置授课机构列表展示
     #path('orglist/',OrgView.as_view(), name ='org_list'),
     #授课机构相关操作

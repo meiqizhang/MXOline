@@ -3,8 +3,9 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from apps.courses.models import Course
 from apps.operations.models import UserFavorite,UserCourse
-from apps.courses.models import Video, CourseResource
+from apps.courses.models import CourseResource
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Create your views here.
 class CourseListView(View):
@@ -69,7 +70,7 @@ class CourseDetailView(View):
                        "has_fav_org":has_fav_org
                     })
 
-class CourseLessonView(View):
+class CourseLessonView(LoginRequiredMixin,View):
     """
     章节信息
     """
@@ -93,10 +94,10 @@ class CourseLessonView(View):
         #     if item.course.id != course.id:
         #         related_courses.append(item.course)
         #
-        # # 查询资料信息
-        # course_resource = CourseResource.objects.filter(course=course)
+        # 查询资料信息
+        course_resource = CourseResource.objects.filter(course=course)
         return render(request, 'course-video.html',
                       {"course": course,
-                       # "course_resource":course_resource,
+                       "course_resource":course_resource,
                        # "related_courses":related_courses,
                        })
