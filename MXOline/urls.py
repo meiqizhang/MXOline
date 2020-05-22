@@ -25,12 +25,14 @@ from apps.users.views import LoginView,LogoutView
 from django.conf.urls import url,include
 from django.views.static import serve
 from MXOline.settings import MEDIA_ROOT
+from apps.operations.views import IndexView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
     #path('', views.index),
-    path('',TemplateView.as_view(template_name='index.html'),name = 'index'),
-    path('courselist/',TemplateView.as_view(template_name='course-list.html'),name = 'course-list'),
+    #path('',TemplateView.as_view(template_name='index.html'),name = 'index'),
+    path('',IndexView.as_view(), name='index'),
+    #path('courselist/',TemplateView.as_view(template_name='course-list.html'),name = 'course-list'),
     path('login/',LoginView.as_view(), name ='login'),
     path('logout/',LogoutView.as_view(), name ='logout'),
     #配置授课机构列表展示

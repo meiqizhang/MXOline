@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from apps.operations.forms import UserFavForm,CommentForm
 from django.http import JsonResponse
-from apps.operations.models import UserFavorite,CourseComments
+from apps.operations.models import UserFavorite,CourseComments, Banner
 from apps.courses.models import Course
 from apps.organization.models import CourseOrg
 from apps.organization.models import Teacher
@@ -90,3 +90,30 @@ class CommentView(View):
                 "status": "success",
                 "msg": '参数错误'
             })
+
+class IndexView(View):
+    def get(self, request, *args, **kwargs):
+        """
+        首页处理
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # banner加载
+        banners = Banner.objects.all().order_by("index")[:4]
+
+         # 公开课加载 （除去banner之外的）
+        courses = Course.objects.filter(is_banner=False)[:6]
+
+         # 小banner
+        banner_courses = Course.objects.filter(is_banner=True)[:4]
+        # 课程机构加载
+        course_orgs = CourseOrg.objects.all()[:15]
+        return render(request,'index.html',{
+            "banners":banners,
+            "courses":courses,
+            "course_orgs":course_orgs,
+            "banner_courses":banner_courses,
+
+         })
