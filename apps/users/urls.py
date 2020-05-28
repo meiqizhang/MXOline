@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from apps.organization.views import OrgView, AddAsk, TeacherListView, TeacherDeatailView
-from apps.users.views import UserInfoView, MyFavOrgView, MyFavCourseView, MyFavTeacherView
+from apps.users.views import UserInfoView, MyFavOrgView, MyFavCourseView, MyFavTeacherView,ChangePwdView
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView
 
@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^myfavorg/$', MyFavOrgView.as_view(), name='myfavorg'),
     url(r'^myfav_teacher/$', MyFavTeacherView.as_view(), name='myfav_teacher'),
     url(r'^myfav_course/$', MyFavCourseView.as_view(), name='myfav_course'),
+    url(r'^update/pwd/$', ChangePwdView.as_view(), name='update_pwd'),
  ]
